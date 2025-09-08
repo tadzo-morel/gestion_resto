@@ -11,16 +11,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "user")
-public abstract class User {
+public class Facture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nom;
-    private  String  prenom;
-    private String telephone;
-    private  String email;
-    private String password;
-
+    private String num_compte;
+    @OneToOne
+    Paiement paiement;
+    @OneToOne
+    Commande command;
 }

@@ -6,28 +6,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class Reservation {
+@Getter
+@Entity
+public class LigneDeCommande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate dateReservation;
-    private LocalTime heure;
-    private int nbrePersonne;
-    @Enumerated(EnumType.STRING)
-    StatutReservation status;
+    private Long quantite_article;
     @ManyToOne
-    Client client;
+    Commande commande;
     @ManyToOne
-    Tables table;
-    @ManyToOne
-    EspaceReservable espaceReservable;
+    ArticleMenu articleMenu;
 
 }

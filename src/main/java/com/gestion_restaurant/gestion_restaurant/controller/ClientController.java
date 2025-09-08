@@ -3,12 +3,12 @@ package com.gestion_restaurant.gestion_restaurant.controller;
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientDTOResponse;
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientRequestDTO;
 import com.gestion_restaurant.gestion_restaurant.repository.ClientRepository;
-import com.gestion_restaurant.gestion_restaurant.service.ClientMapperService;
 import com.gestion_restaurant.gestion_restaurant.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -16,11 +16,13 @@ import java.util.List;
 @RequestMapping("/client")
 public class ClientController {
     private final ClientService clientService;
-    private final ClientRepository clientRepository;
-    private final ClientMapperService clientMapperService;
     @PostMapping("/create")
     public ResponseEntity<ClientDTOResponse> create(@RequestBody ClientRequestDTO client){
         return clientService.create(client);
+    }
+    @GetMapping("/")
+    public ResponseEntity<List<ClientDTOResponse>> getAllClient(){
+        return  clientService.getAllClient();
     }
     @GetMapping("/id/{id}")
     public ResponseEntity <ClientDTOResponse> getClient(@PathVariable Long id){
@@ -33,10 +35,6 @@ public class ClientController {
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id){
         return clientService.delete(id);
-    }
-    @GetMapping("/")
-    public List<ClientDTOResponse> getAllClient(){
-        return  clientService.getAllClient();
     }
 //    @GetMapping("/email/{nom}")
 //    public String getEmailByName( @PathVariable String nom){

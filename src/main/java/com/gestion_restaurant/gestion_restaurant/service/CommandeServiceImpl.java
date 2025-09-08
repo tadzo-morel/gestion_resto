@@ -1,0 +1,119 @@
+package com.gestion_restaurant.gestion_restaurant.service;
+
+
+import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.entity.Commande;
+import com.gestion_restaurant.gestion_restaurant.repository.CommandeRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+@AllArgsConstructor
+@Service
+public class CommandeServiceImpl implements CommandeService{
+    private final CommandeRepository commandeRepository;
+    @Override
+    public ResponseEntity<CommandeDtoResponse> create(CommandeDtoRequest commandeDtoRequest) {
+        Commande commande=new Commande();
+        commande.setDateCommande(commandeDtoRequest.dateCommande());
+        commande.setHeureCommande(commandeDtoRequest.heureCommande());
+        commande.setDateLivraison(commandeDtoRequest.dateLivraison());
+        commande.setHereLivraison(commandeDtoRequest.heureLivraison());
+        commande.setMontant(commandeDtoRequest.montant());
+        commande.setStatus(commandeDtoRequest.status());
+        commande.setLocalisation(commandeDtoRequest.localisation());
+        Commande newCommande=commandeRepository.save(commande);
+        CommandeDtoResponse commandeDtoResponse=new CommandeDtoResponse(
+                newCommande.getId(),
+                newCommande.getDateCommande(),
+                newCommande.getHeureCommande(),
+                newCommande.getDateLivraison(),
+                newCommande.getHereLivraison(),
+                newCommande.getMontant(),
+                newCommande.getStatus(),
+                newCommande.getLocalisation()
+        );
+        return new ResponseEntity<>(commandeDtoResponse, HttpStatus.CREATED);
+    }
+
+    @Override
+    public ResponseEntity<CommandeDtoResponse> getCommande(Long id) {
+        Optional<Commande> commande=commandeRepository.findById(id);
+        if (commande.isPresent()){
+            Commande commande1=commande.get();
+            CommandeDtoResponse commandeDtoResponse=new CommandeDtoResponse(
+                    commande1.getId(),
+                    commande1.getDateCommande(),
+                    commande1.getHeureCommande(),
+                    commande1.getDateLivraison(),
+                    commande1.getHereLivraison(),
+                    commande1.getMontant(),
+                    commande1.getStatus(),
+                    commande1.getLocalisation()
+            );
+
+            return new ResponseEntity<>(commandeDtoResponse, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @Override
+    public ResponseEntity<List<CommandeDtoResponse>> getAllCommande() {
+        List<CommandeDtoResponse>commandeDtoResponses=new ArrayList<>();
+        List<Commande> commandes=commandeRepository.findAll();
+        for (Commande commande:commandes){
+            commandeDtoResponses.add(new CommandeDtoResponse(
+                    commande.getId(),
+                    commande.getDateCommande(),
+                    commande.getHeureCommande(),
+                    commande.getDateLivraison(),
+                    commande.getHereLivraison(),
+                    commande.getMontant(),
+                    commande.getStatus(),
+                    commande.getLocalisation()
+
+            ));
+        }
+        return new ResponseEntity<>(commandeDtoResponses,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<CommandeDtoResponse> updateCommande(Long id, CommandeDtoRequest commandeDtoRequest) {
+        Commande commande = commandeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Client not found with id: " + id));
+
+        commande.setDateCommande(commandeDtoRequest.dateCommande());
+        commande.setHeureCommande(commandeDtoRequest.heureLivraison());
+        commande.setDateLivraison(commandeDtoRequest.dateLivraison());
+        commande.setHereLivraison(commandeDtoRequest.heureLivraison());
+        commande.setMontant(commandeDtoRequest.montant());
+        commande.setStatus(commandeDtoRequest.status());
+        commande.setLocalisation(commandeDtoRequest.localisation());
+        Commande commandeNew =commandeRepository.save(commande);
+
+        CommandeDtoResponse commandeDtoResponse= new CommandeDtoResponse(
+               commandeNew.getId(),
+                commandeNew.getDateCommande(),
+                commandeNew.getHeureCommande(),
+                commandeNew.getDateLivraison(),
+                commandeNew.getHereLivraison(),
+                commandeNew.getMontant(),
+                commandeNew.getStatus(),
+                commandeNew.getLocalisation()
+        );
+        return new ResponseEntity<>(commandeDtoResponse,HttpStatus.OK);
+    }
+
+    @Override
+    public String delete(Long id) {
+        commandeRepository.deleteById(id);
+        return "Commande supprimer";
+    }
+}

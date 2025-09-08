@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,21 +17,21 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ClientServiceImpl implements ClientService{
     private final ClientRepository clientRepository;
-    private final ClientMapperService clientMapperService;
     @Override
     public ResponseEntity<ClientDTOResponse> create(ClientRequestDTO clientRequestDTO) {
         Client client=new Client();
         client.setNom(clientRequestDTO.getNom());
         client.setPrenom(clientRequestDTO.getPrenom());
-        client.setPhoneNumber(clientRequestDTO.getPhoneNumber());
+        client.setTelephone(clientRequestDTO.getTelephone());
         client.setEmail(clientRequestDTO.getEmail());
-        client.setLocalisation(clientRequestDTO.getLocalisation());
         client.setPassword(clientRequestDTO.getPassword());
+        client.setLocalisation(clientRequestDTO.getLocalisation());
         Client client1=clientRepository.save(client);
         ClientDTOResponse clientDTOResponse=new ClientDTOResponse(
+                client1.getId(),
                 client1.getNom(),
                 client1.getPrenom(),
-                client1.getPhoneNumber(),
+                client1.getTelephone(),
                 client1.getLocalisation()
         );
         return new ResponseEntity<>(clientDTOResponse, HttpStatus.CREATED);
@@ -42,10 +43,11 @@ public class ClientServiceImpl implements ClientService{
         if (client.isPresent()){
             Client client1=client.get();
             ClientDTOResponse clientDTOResponse=new ClientDTOResponse(
+                    client1.getId(),
                     client1.getNom(),
                     client1.getPrenom(),
-                    client1.getPhoneNumber(),
-                    client1.getEmail()
+                    client1.getTelephone(),
+                    client1.getLocalisation()
             );
 
             return new ResponseEntity<>(clientDTOResponse, HttpStatus.OK);
@@ -55,9 +57,19 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public List<ClientDTOResponse> getAllClient() {
-        return clientRepository.findAll().stream()
-                .map(clientMapperService::toDTO).toList();
+    public ResponseEntity<List<ClientDTOResponse>> getAllClient() {
+        List<ClientDTOResponse>clientDTOResponses=new ArrayList<>();
+        List<Client> clients=clientRepository.findAll();
+        for (Client client:clients){
+            clientDTOResponses.add(new ClientDTOResponse(
+                    client.getId(),
+                    client.getNom(),
+                    client.getPrenom() ,
+                    client.getTelephone(),
+                    client.getLocalisation()
+            ));
+        }
+        return new ResponseEntity<>(clientDTOResponses,HttpStatus.OK);
     }
 
     @Override
@@ -66,16 +78,19 @@ public class ClientServiceImpl implements ClientService{
                 .orElseThrow(() -> new RuntimeException("Client not found with id: " + id));
 
         clientToUpdate.setNom(clientRequestDTO.getNom());
+        clientToUpdate.setPrenom(clientRequestDTO.getPrenom());
+        clientToUpdate.setTelephone(clientRequestDTO.getTelephone());
         clientToUpdate.setEmail(clientRequestDTO.getEmail());
-        clientToUpdate.setPhoneNumber(clientRequestDTO.getPhoneNumber());
         clientToUpdate.setPassword(clientRequestDTO.getPassword());
+        clientToUpdate.setLocalisation(clientRequestDTO.getLocalisation());
         Client clientNew =clientRepository.save(clientToUpdate);
 
         ClientDTOResponse clientDTOResponse= new ClientDTOResponse(
+                clientNew.getId(),
                 clientNew.getNom(),
                 clientNew.getPrenom(),
                 clientNew.getEmail(),
-                clientNew.getPhoneNumber()
+                clientNew.getTelephone()
         );
         return new ResponseEntity<>(clientDTOResponse,HttpStatus.OK);
     }

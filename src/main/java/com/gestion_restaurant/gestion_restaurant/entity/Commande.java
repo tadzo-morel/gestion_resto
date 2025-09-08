@@ -22,8 +22,10 @@ public class Commande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate dateCommande;
-    private LocalTime heure;
-    private Long montant;
+    private LocalTime heureCommande;
+    private LocalDate dateLivraison;
+    private LocalTime hereLivraison;
+    private double montant;
     @Enumerated(EnumType.STRING)
     StatutCommande status;
     private  String localisation;
@@ -32,6 +34,10 @@ public class Commande {
     @ManyToOne
     Livreur livreur;
     @OneToMany(mappedBy = "commande",fetch = FetchType.EAGER)
-    private List<ArticleMenu> articleMenus=new ArrayList<>();
+    private List<LigneDeCommande>articleMenu=new ArrayList<>();
+    @OneToOne(mappedBy = "command")
+    Facture facture;
+    @OneToOne(mappedBy = "commands")
+    Paiement paiement;
 
 }

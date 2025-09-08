@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +20,9 @@ public class ArticleMenu {
     private  Long id;
     private String nomPlat;
     private String description;
-    private Long prix;
+    private double prix;
     @ManyToOne
     Commande commande;
+    @OneToMany(mappedBy = "articleMenu",fetch = FetchType.EAGER)
+    private List<LigneDeCommande> commandes=new ArrayList<>();
 }

@@ -18,7 +18,6 @@ import java.util.List;
 public class Livreur extends User{
     @Enumerated(EnumType.STRING)
     private StatutLivreur status;
-    private String password;
     @OneToMany(mappedBy = "livreur")
     private List<Commande>commandes;
 }

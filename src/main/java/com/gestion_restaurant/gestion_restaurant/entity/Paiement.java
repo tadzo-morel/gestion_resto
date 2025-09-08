@@ -9,25 +9,25 @@ import lombok.Setter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
-public class Reservation {
+@Getter
+@Entity
+public class Paiement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate dateReservation;
-    private LocalTime heure;
-    private int nbrePersonne;
+    private LocalDate date_paiement;
+    private LocalTime heure_paiement;
+    private double montant;
     @Enumerated(EnumType.STRING)
-    StatutReservation status;
-    @ManyToOne
-    Client client;
-    @ManyToOne
-    Tables table;
-    @ManyToOne
-    EspaceReservable espaceReservable;
+    ModePaiement mode;
+    @OneToOne
+    Commande commands;
+    @OneToOne(mappedBy = "paiement")
+    Facture facture;
+
+
 
 }
