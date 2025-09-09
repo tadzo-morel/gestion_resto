@@ -68,7 +68,7 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
                     newligneDeCommande.getId(),
                     newligneDeCommande.getQuantite_article()
             );
-            return new ResponseEntity<>(ligneDeCommandeDtoResponse,HttpStatus.OK);git
+            return new ResponseEntity<>(ligneDeCommandeDtoResponse,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
