@@ -2,13 +2,11 @@ package com.gestion_restaurant.gestion_restaurant.controller;
 
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientDTOResponse;
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientRequestDTO;
-import com.gestion_restaurant.gestion_restaurant.repository.ClientRepository;
 import com.gestion_restaurant.gestion_restaurant.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
