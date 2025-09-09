@@ -12,6 +12,6 @@ public interface SalleService {
     public ResponseEntity<SalleDtoResponse> create(SalleDtoRequest salleDtoRequest);
     public ResponseEntity <SalleDtoResponse> getSalle(Long id);
     public ResponseEntity<List<SalleDtoResponse>> getAllSalle();
-    public ResponseEntity <SalleDtoResponse> updateTable(Long id, SalleDtoRequest salleDtoRequest);
+    public ResponseEntity <SalleDtoResponse> updateSalle(Long id, SalleDtoRequest salleDtoRequest);
     public String delete(Long id);
 }
