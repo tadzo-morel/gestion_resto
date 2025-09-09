@@ -10,7 +10,7 @@ import java.util.List;
 public interface ClientService {
     public ResponseEntity <ClientDTOResponse> create(ClientRequestDTO clientRequestDTO);
     public ResponseEntity <ClientDTOResponse> getClient(Long id);
-    public List<ClientDTOResponse> getAllClient();
+    public ResponseEntity<List<ClientDTOResponse>> getAllClient();
     public ResponseEntity <ClientDTOResponse> updateClient(Long id,ClientRequestDTO clientRequestDTO);
     public String delete(Long id);
 

@@ -16,7 +16,6 @@ import java.util.List;
 @DiscriminatorValue("Client")
 public class Client extends User {
     private String localisation;
-    private String password;
     @OneToMany(mappedBy = "client")
     private List<Commande> commandes;
     @OneToMany(mappedBy = "client")

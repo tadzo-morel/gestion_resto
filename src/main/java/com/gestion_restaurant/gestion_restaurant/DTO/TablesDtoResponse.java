@@ -1,0 +1,10 @@
+package com.gestion_restaurant.gestion_restaurant.DTO;
+
+import com.gestion_restaurant.gestion_restaurant.entity.StatusEspaceReservable;
+
+public record TablesDtoResponse(
+        Long id,
+        StatusEspaceReservable status,
+        int nbre_place
+) {
+}

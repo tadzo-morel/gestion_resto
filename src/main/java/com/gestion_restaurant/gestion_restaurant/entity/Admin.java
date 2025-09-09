@@ -1,21 +1,18 @@
 package com.gestion_restaurant.gestion_restaurant.entity;
 
+
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
-@DiscriminatorValue("table")
-@Entity
-public class Tables extends EspaceReservable {
-    private int nbre_place;
-    @ManyToOne
-    Salle salle;
+@Setter
+@DiscriminatorValue("admin")
+public class Admin extends User{
+    private String droit;
 }

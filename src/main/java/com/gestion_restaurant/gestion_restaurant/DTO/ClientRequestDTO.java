@@ -12,7 +12,7 @@ import lombok.Setter;
 public class ClientRequestDTO {
     private String nom;
     private String prenom;
-    private String phoneNumber;
+    private String telephone;
     private String email;
     private String localisation;
     private String password;
