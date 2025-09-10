@@ -35,4 +35,12 @@ public class CommandeController {
     public String delete(@PathVariable Long id){
         return commandeService.delete(id);
     }
+    @GetMapping("/nomClient/{nom}")
+    public ResponseEntity<List<CommandeDtoResponse>> getAllCommandeBYClient(@PathVariable String nom){
+        return commandeService.getAllCommandeFromClient(nom);
+    }
+    @GetMapping("/nomLivreur/{nom}")
+    public ResponseEntity<List<CommandeDtoResponse>> getAllCommandeBYLivreur(@PathVariable String nom){
+        return commandeService.getAllCommandeFromLivreur(nom);
+    }
 }

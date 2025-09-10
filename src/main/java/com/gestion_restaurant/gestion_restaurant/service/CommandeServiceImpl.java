@@ -3,8 +3,12 @@ package com.gestion_restaurant.gestion_restaurant.service;
 
 import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoRequest;
 import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.entity.Client;
 import com.gestion_restaurant.gestion_restaurant.entity.Commande;
+import com.gestion_restaurant.gestion_restaurant.entity.Livreur;
+import com.gestion_restaurant.gestion_restaurant.repository.ClientRepository;
 import com.gestion_restaurant.gestion_restaurant.repository.CommandeRepository;
+import com.gestion_restaurant.gestion_restaurant.repository.LivreurRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +22,27 @@ import java.util.Optional;
 @Service
 public class CommandeServiceImpl implements CommandeService{
     private final CommandeRepository commandeRepository;
+    private final LivreurRepository livreurRepository;
+    private final ClientRepository clientRepository;
     @Override
     public ResponseEntity<CommandeDtoResponse> create(CommandeDtoRequest commandeDtoRequest) {
         Commande commande=new Commande();
         commande.setDateCommande(commandeDtoRequest.dateCommande());
         commande.setHeureCommande(commandeDtoRequest.heureCommande());
         commande.setDateLivraison(commandeDtoRequest.dateLivraison());
-        commande.setHereLivraison(commandeDtoRequest.heureLivraison());
+        commande.setHeureLivraison(commandeDtoRequest.heureLivraison());
         commande.setMontant(commandeDtoRequest.montant());
         commande.setStatus(commandeDtoRequest.status());
         commande.setLocalisation(commandeDtoRequest.localisation());
+        commande.setClient(clientRepository.findByNom(commandeDtoRequest.nomClient()));
+        commande.setLivreur(livreurRepository.findByNom(commandeDtoRequest.nomLivreur()));
         Commande newCommande=commandeRepository.save(commande);
         CommandeDtoResponse commandeDtoResponse=new CommandeDtoResponse(
                 newCommande.getId(),
                 newCommande.getDateCommande(),
                 newCommande.getHeureCommande(),
                 newCommande.getDateLivraison(),
-                newCommande.getHereLivraison(),
+                newCommande.getHeureLivraison(),
                 newCommande.getMontant(),
                 newCommande.getStatus(),
                 newCommande.getLocalisation()
@@ -52,7 +60,7 @@ public class CommandeServiceImpl implements CommandeService{
                     commande1.getDateCommande(),
                     commande1.getHeureCommande(),
                     commande1.getDateLivraison(),
-                    commande1.getHereLivraison(),
+                    commande1.getHeureLivraison(),
                     commande1.getMontant(),
                     commande1.getStatus(),
                     commande1.getLocalisation()
@@ -74,7 +82,7 @@ public class CommandeServiceImpl implements CommandeService{
                     commande.getDateCommande(),
                     commande.getHeureCommande(),
                     commande.getDateLivraison(),
-                    commande.getHereLivraison(),
+                    commande.getHeureLivraison(),
                     commande.getMontant(),
                     commande.getStatus(),
                     commande.getLocalisation()
@@ -92,7 +100,7 @@ public class CommandeServiceImpl implements CommandeService{
         commande.setDateCommande(commandeDtoRequest.dateCommande());
         commande.setHeureCommande(commandeDtoRequest.heureLivraison());
         commande.setDateLivraison(commandeDtoRequest.dateLivraison());
-        commande.setHereLivraison(commandeDtoRequest.heureLivraison());
+        commande.setHeureLivraison(commandeDtoRequest.heureLivraison());
         commande.setMontant(commandeDtoRequest.montant());
         commande.setStatus(commandeDtoRequest.status());
         commande.setLocalisation(commandeDtoRequest.localisation());
@@ -103,7 +111,7 @@ public class CommandeServiceImpl implements CommandeService{
                 commandeNew.getDateCommande(),
                 commandeNew.getHeureCommande(),
                 commandeNew.getDateLivraison(),
-                commandeNew.getHereLivraison(),
+                commandeNew.getHeureLivraison(),
                 commandeNew.getMontant(),
                 commandeNew.getStatus(),
                 commandeNew.getLocalisation()
@@ -116,4 +124,46 @@ public class CommandeServiceImpl implements CommandeService{
         commandeRepository.deleteById(id);
         return "Commande supprimer";
     }
+    @Override
+    public ResponseEntity<List<CommandeDtoResponse>> getAllCommandeFromClient(String nom) {
+        List<Commande> commandes=commandeRepository.getAllCommandeFromClient(nom);
+        List<CommandeDtoResponse> commandeDtoResponses=new ArrayList<>();
+        for (Commande commande:commandes){
+            commandeDtoResponses.add(new CommandeDtoResponse(
+                    commande.getId(),
+                    commande.getDateCommande(),
+                    commande.getHeureCommande(),
+                    commande.getDateLivraison(),
+                    commande.getHeureLivraison(),
+                    commande.getMontant(),
+                    commande.getStatus(),
+                    commande.getLocalisation()
+            ));
+        }
+        return new ResponseEntity<>(commandeDtoResponses,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<List<CommandeDtoResponse>> getAllCommandeFromLivreur(String nom) {
+        List<Commande>commandes=commandeRepository.findAll();
+        List<CommandeDtoResponse> commandeDtoResponses=new ArrayList<>();
+        for (Commande commande:commandes){
+            commandeDtoResponses.add(new CommandeDtoResponse(
+                    commande.getId(),
+                    commande.getDateCommande(),
+                    commande.getHeureCommande(),
+                    commande.getDateLivraison(),
+                    commande.getHeureLivraison(),
+                    commande.getMontant(),
+                    commande.getStatus(),
+                    commande.getLocalisation()
+            ));
+        }
+        return new ResponseEntity<>(commandeDtoResponses,HttpStatus.OK);
+    }
+
+//    @Override
+//    public Client finByNomClient(String nom) {
+//        return null;
+//    }
 }

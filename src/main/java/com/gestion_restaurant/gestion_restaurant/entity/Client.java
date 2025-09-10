@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -16,9 +17,9 @@ import java.util.List;
 @DiscriminatorValue("Client")
 public class Client extends User {
     private String localisation;
-    @OneToMany(mappedBy = "client")
-    private List<Commande> commandes;
-    @OneToMany(mappedBy = "client")
-    private List<Reservation>reservations;
+    @OneToMany(mappedBy = "client",fetch = FetchType.EAGER)
+    private List<Commande> commandes=new ArrayList<>();
+    @OneToMany(mappedBy = "client",fetch = FetchType.EAGER)
+    private List<Reservation>reservations=new ArrayList<>();
 
 }
