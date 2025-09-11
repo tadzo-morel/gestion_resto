@@ -21,8 +21,8 @@ public class TableServiceImpl implements TableService{
     @Override
     public ResponseEntity<TablesDtoResponse> create(TablesDtoRequest tablesDtoRequest) {
         Tables tables=new Tables();
-        tables.setStatus(tablesDtoRequest.status());
         tables.setNbre_place(tablesDtoRequest.nbre_place());
+        tables.setStatus(tablesDtoRequest.status());
         Tables newTable=tableRepository.save(tables);
         TablesDtoResponse tablesDtoResponse =new TablesDtoResponse(
                 newTable.getId(),

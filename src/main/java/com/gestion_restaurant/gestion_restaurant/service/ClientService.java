@@ -14,7 +14,7 @@ public interface ClientService {
     public ResponseEntity<List<ClientDTOResponse>> getAllClient();
     public ResponseEntity <ClientDTOResponse> updateClient(Long id,ClientRequestDTO clientRequestDTO);
     public String delete(Long id);
-    public Client findByNomClient(String nom);
+    public ResponseEntity<ClientDTOResponse> findByNomClient(String nom);
 
 
 }

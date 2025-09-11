@@ -34,8 +34,8 @@ public class CommandeServiceImpl implements CommandeService{
         commande.setMontant(commandeDtoRequest.montant());
         commande.setStatus(commandeDtoRequest.status());
         commande.setLocalisation(commandeDtoRequest.localisation());
-        commande.setClient(clientRepository.findByNom(commandeDtoRequest.nomClient()));
-        commande.setLivreur(livreurRepository.findByNom(commandeDtoRequest.nomLivreur()));
+        commande.setClient(clientRepository.findByNom(commandeDtoRequest.nomClient()).orElseThrow(()->new RuntimeException("le client nexiste pas")));
+        commande.setLivreur(livreurRepository.findByNom(commandeDtoRequest.nomLivreur()).orElseThrow(()->new RuntimeException("le livreur n'existe pas")));
         Commande newCommande=commandeRepository.save(commande);
         CommandeDtoResponse commandeDtoResponse=new CommandeDtoResponse(
                 newCommande.getId(),
@@ -44,6 +44,8 @@ public class CommandeServiceImpl implements CommandeService{
                 newCommande.getDateLivraison(),
                 newCommande.getHeureLivraison(),
                 newCommande.getMontant(),
+                newCommande.getClient().getNom(),
+                newCommande.getLivreur().getNom(),
                 newCommande.getStatus(),
                 newCommande.getLocalisation()
         );
@@ -62,6 +64,8 @@ public class CommandeServiceImpl implements CommandeService{
                     commande1.getDateLivraison(),
                     commande1.getHeureLivraison(),
                     commande1.getMontant(),
+                    commande1.getClient().getNom(),
+                    commande1.getLivreur().getNom(),
                     commande1.getStatus(),
                     commande1.getLocalisation()
             );
@@ -84,6 +88,8 @@ public class CommandeServiceImpl implements CommandeService{
                     commande.getDateLivraison(),
                     commande.getHeureLivraison(),
                     commande.getMontant(),
+                    commande.getClient().getNom(),
+                    commande.getLivreur().getNom(),
                     commande.getStatus(),
                     commande.getLocalisation()
 
@@ -113,6 +119,8 @@ public class CommandeServiceImpl implements CommandeService{
                 commandeNew.getDateLivraison(),
                 commandeNew.getHeureLivraison(),
                 commandeNew.getMontant(),
+                commande.getClient().getNom(),
+                commande.getLivreur().getNom(),
                 commandeNew.getStatus(),
                 commandeNew.getLocalisation()
         );
@@ -136,6 +144,8 @@ public class CommandeServiceImpl implements CommandeService{
                     commande.getDateLivraison(),
                     commande.getHeureLivraison(),
                     commande.getMontant(),
+                    commande.getClient().getNom(),
+                    commande.getLivreur().getNom(),
                     commande.getStatus(),
                     commande.getLocalisation()
             ));
@@ -155,6 +165,8 @@ public class CommandeServiceImpl implements CommandeService{
                     commande.getDateLivraison(),
                     commande.getHeureLivraison(),
                     commande.getMontant(),
+                    commande.getClient().getNom(),
+                    commande.getLivreur().getNom(),
                     commande.getStatus(),
                     commande.getLocalisation()
             ));
