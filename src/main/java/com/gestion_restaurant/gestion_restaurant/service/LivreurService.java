@@ -12,4 +12,5 @@ public interface LivreurService {
     public ResponseEntity<List<LivreurDtoResponse>> getAllLivreur();
     public ResponseEntity <LivreurDtoResponse> updateLivreur(Long id, LivreurDtoRequest livreurDtoRequest);
     public String delete(Long id);
+    public ResponseEntity<LivreurDtoResponse> findByName(String nom);
 }

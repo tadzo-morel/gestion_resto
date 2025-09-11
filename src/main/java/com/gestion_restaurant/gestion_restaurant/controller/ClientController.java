@@ -2,6 +2,7 @@ package com.gestion_restaurant.gestion_restaurant.controller;
 
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientDTOResponse;
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientRequestDTO;
+import com.gestion_restaurant.gestion_restaurant.DTO.LivreurDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Client;
 import com.gestion_restaurant.gestion_restaurant.entity.Commande;
 import com.gestion_restaurant.gestion_restaurant.service.ClientService;
@@ -33,12 +34,11 @@ public class ClientController {
         return clientService.updateClient(id,client);
     }
     @GetMapping("/{nom}")
-    public Client getByNomClient(@PathVariable String nom){
+    public ResponseEntity <ClientDTOResponse> getByNomClient(@PathVariable String nom){
         return clientService.findByNomClient(nom);
     }
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id){
         return clientService.delete(id);
     }
-
 }

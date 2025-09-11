@@ -101,4 +101,22 @@ public class LivreurServiceImpl implements LivreurService{
         livreurRepository.deleteById(id);
         return "Livreur supprimer";
     }
+
+    @Override
+    public ResponseEntity<LivreurDtoResponse> findByName(String nom) {
+       Optional <Livreur> livreur=livreurRepository.findByNom(nom);
+       if (livreur.isPresent()){
+           Livreur livreur1=livreur.get();
+           LivreurDtoResponse livreurDtoResponse=new LivreurDtoResponse(
+                   livreur1.getId(),
+                   livreur1.getNom(),
+                   livreur1.getPrenom(),
+                   livreur1.getTelephone(),
+                   livreur1.getStatus()
+           );
+           return new ResponseEntity<>(livreurDtoResponse,HttpStatus.OK);
+       }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 }
