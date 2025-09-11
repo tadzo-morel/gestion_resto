@@ -6,6 +6,7 @@ import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoRequest;
 import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Salle;
 import com.gestion_restaurant.gestion_restaurant.entity.Tables;
+import com.gestion_restaurant.gestion_restaurant.repository.ReservationRepository;
 import com.gestion_restaurant.gestion_restaurant.repository.SalleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
@@ -21,17 +22,21 @@ import java.util.Optional;
 @Service
 public class SalleServiceImpl implements SalleService{
     private final SalleRepository salleRepository;
+    private final ReservationRepository reservationRepository;
 
     @Override
     public ResponseEntity<SalleDtoResponse> create(SalleDtoRequest salleDtoRequest) {
         Salle salle=new Salle();
         salle.setStatus(salleDtoRequest.status());
         salle.setCapacite(salleDtoRequest.capacite());
+        salle.setReservation(reservationRepository.getReservationByNbrePersonne(salleDtoRequest.nbrePersonne()));
         Salle newSalle=salleRepository.save(salle);
+
         SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
                 newSalle.getId(),
+                newSalle.getCapacite(),
                 newSalle.getStatus(),
-                newSalle.getCapacite()
+                newSalle.getReservation().getNbrePersonne()
         );
 
         return new ResponseEntity<>(salleDtoResponse, HttpStatus.CREATED);
@@ -44,8 +49,9 @@ public class SalleServiceImpl implements SalleService{
             Salle newSalle=salle.get();
             SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
                     newSalle.getId(),
+                    newSalle.getCapacite(),
                     newSalle.getStatus(),
-                    newSalle.getCapacite()
+                    newSalle.getReservation().getNbrePersonne()
             );
             return new ResponseEntity<>(salleDtoResponse,HttpStatus.OK);
         }
@@ -59,8 +65,9 @@ public class SalleServiceImpl implements SalleService{
        for (Salle salle:salles){
            salleDtoResponses.add(new SalleDtoResponse(
                    salle.getId(),
+                   salle.getCapacite(),
                    salle.getStatus(),
-                   salle.getCapacite()
+                   salle.getReservation().getNbrePersonne()
            ));
        }
         return new ResponseEntity<>(salleDtoResponses,HttpStatus.OK);
@@ -76,8 +83,9 @@ public class SalleServiceImpl implements SalleService{
             Salle newSalle=salleRepository.save(salle1);
             SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
                     newSalle.getId(),
+                    newSalle.getCapacite(),
                     newSalle.getStatus(),
-                    newSalle.getCapacite()
+                    newSalle.getReservation().getNbrePersonne()
             );
             return new ResponseEntity<>(salleDtoResponse,HttpStatus.OK);
         }
