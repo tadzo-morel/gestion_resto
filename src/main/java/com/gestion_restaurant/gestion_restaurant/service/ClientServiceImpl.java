@@ -103,10 +103,21 @@ public class ClientServiceImpl implements ClientService{
     }
 
     @Override
-    public Client findByNomClient(String nom) {
-        Client client=clientRepository.findByNom(nom);
-        if (client == null) throw new RuntimeException("client not found");
-        return client;
+    public ResponseEntity<ClientDTOResponse> findByNomClient(String nom) {
+       Optional <Client> client1=clientRepository.findByNom(nom);
+        if (client1.isPresent()) {
+            Client client=client1.get();
+        ClientDTOResponse clientDTOResponse=new ClientDTOResponse(
+                client.getId(),
+                client.getNom(),
+                client.getPrenom(),
+                client.getTelephone(),
+                client.getLocalisation()
+        );
+        return new ResponseEntity<>(clientDTOResponse,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
 

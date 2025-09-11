@@ -4,6 +4,7 @@ package com.gestion_restaurant.gestion_restaurant.service;
 import com.gestion_restaurant.gestion_restaurant.DTO.ReservationDtoRequest;
 import com.gestion_restaurant.gestion_restaurant.DTO.ReservationDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Reservation;
+import com.gestion_restaurant.gestion_restaurant.repository.ClientRepository;
 import com.gestion_restaurant.gestion_restaurant.repository.ReservationRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,21 +19,24 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ReservationServiceImpl implements ReservationService{
     private final ReservationRepository reservationRepository;
+    private final ClientRepository clientRepository;
 
     @Override
     public ResponseEntity<ReservationDtoResponse> create(ReservationDtoRequest reservationDtoRequest) {
         Reservation reservation=new Reservation();
-        reservation.setDateReservation(reservationDtoRequest.date_reservation());
-        reservation.setHeure(reservationDtoRequest.heure_reservation());
+        reservation.setDateReservation(reservationDtoRequest.dateReservation());
+        reservation.setHeure(reservationDtoRequest.heureReservation());
         reservation.setNbrePersonne(reservationDtoRequest.nbrePersonne());
         reservation.setStatus(reservationDtoRequest.status());
+        reservation.setClient(clientRepository.findByNom(reservationDtoRequest.nomClient()).orElseThrow(()->new RuntimeException("client non trouver")));
         Reservation newReservation=reservationRepository.save(reservation);
         ReservationDtoResponse reservationDtoResponse=new ReservationDtoResponse(
                 newReservation.getId(),
                 newReservation.getDateReservation(),
                 newReservation.getHeure(),
                 newReservation.getNbrePersonne(),
-                newReservation.getStatus()
+                newReservation.getStatus(),
+                newReservation.getClient().getNom()
         );
         return new ResponseEntity<>(reservationDtoResponse, HttpStatus.CREATED);
     }
@@ -47,7 +51,8 @@ public class ReservationServiceImpl implements ReservationService{
                     reservation1.getDateReservation(),
                     reservation1.getHeure(),
                     reservation1.getNbrePersonne(),
-                    reservation1.getStatus()
+                    reservation1.getStatus(),
+                    reservation1.getClient().getNom()
             );
 
             return new ResponseEntity<>(reservationDtoResponse, HttpStatus.OK);
@@ -66,7 +71,8 @@ public class ReservationServiceImpl implements ReservationService{
                     reservation.getDateReservation(),
                     reservation.getHeure(),
                     reservation.getNbrePersonne(),
-                    reservation.getStatus()
+                    reservation.getStatus(),
+                    reservation.getClient().getNom()
             ));
         }
         return new ResponseEntity<>(reservationDtoResponses,HttpStatus.OK);
@@ -77,8 +83,8 @@ public class ReservationServiceImpl implements ReservationService{
         Reservation reservation = reservationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Reservation not found with id: " + id));
 
-        reservation.setDateReservation(reservationDtoRequest.date_reservation());
-        reservation.setHeure(reservationDtoRequest.heure_reservation());
+        reservation.setDateReservation(reservationDtoRequest.dateReservation());
+        reservation.setHeure(reservationDtoRequest.heureReservation());
         reservation.setNbrePersonne(reservationDtoRequest.nbrePersonne());
         reservation.setStatus(reservationDtoRequest.status());
         Reservation reservationNew =reservationRepository.save(reservation);
@@ -88,7 +94,8 @@ public class ReservationServiceImpl implements ReservationService{
                 reservationNew.getDateReservation(),
                 reservationNew.getHeure(),
                 reservationNew.getNbrePersonne(),
-                reservationNew.getStatus()
+                reservationNew.getStatus(),
+                reservation.getClient().getNom()
         );
         return new ResponseEntity<>(reservationDtoResponse,HttpStatus.OK);
     }

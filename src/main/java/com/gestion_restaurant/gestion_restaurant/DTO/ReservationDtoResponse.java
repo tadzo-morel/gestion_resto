@@ -7,9 +7,10 @@ import java.time.LocalTime;
 
 public record ReservationDtoResponse(
         Long id,
-        LocalDate date_reservation,
-        LocalTime heure_reservation,
+        LocalDate dateReservation,
+        LocalTime heureReservation,
         int nbrePersonne,
-        StatutReservation status
+        StatutReservation status,
+        String nomClient
 ) {
 }

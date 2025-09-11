@@ -34,4 +34,8 @@ public class LivreurController {
     public String delete(@PathVariable Long id){
         return livreurService.delete(id);
     }
+    @GetMapping("/nom/{nom}")
+    public ResponseEntity<LivreurDtoResponse> findByNom(@PathVariable String nom){
+        return livreurService.findByName(nom);
+    }
 }

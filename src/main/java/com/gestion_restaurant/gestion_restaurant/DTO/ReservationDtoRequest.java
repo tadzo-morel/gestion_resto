@@ -6,9 +6,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public record ReservationDtoRequest(
-        LocalDate date_reservation,
-        LocalTime heure_reservation,
+        LocalDate dateReservation,
+        LocalTime heureReservation,
         int nbrePersonne,
-        StatutReservation status
+        StatutReservation status,
+        String nomClient
 ) {
 }
