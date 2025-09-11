@@ -4,6 +4,7 @@ import com.gestion_restaurant.gestion_restaurant.entity.StatusEspace;
 
 public record SalleDtoRequest(
         Long capacite,
-        StatusEspace status
+        StatusEspace status,
+        int nbrePersonne
 ) {
 }
