@@ -11,6 +11,8 @@ public record CommandeDtoRequest(
         LocalTime heureCommande,
         LocalTime heureLivraison,
         double montant,
+        String nomClient,
+        String nomLivreur,
         StatutCommande status,
         String localisation
 ) {

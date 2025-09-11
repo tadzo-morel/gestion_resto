@@ -3,6 +3,7 @@ package com.gestion_restaurant.gestion_restaurant.service;
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientDTOResponse;
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientRequestDTO;
 import com.gestion_restaurant.gestion_restaurant.entity.Client;
+import com.gestion_restaurant.gestion_restaurant.entity.Commande;
 import com.gestion_restaurant.gestion_restaurant.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -100,4 +101,13 @@ public class ClientServiceImpl implements ClientService{
         clientRepository.deleteById(id);
         return "Client supprimer";
     }
+
+    @Override
+    public Client findByNomClient(String nom) {
+        Client client=clientRepository.findByNom(nom);
+        if (client == null) throw new RuntimeException("client not found");
+        return client;
+    }
+
+
 }

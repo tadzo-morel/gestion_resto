@@ -67,7 +67,7 @@ public class SalleServiceImpl implements SalleService{
     }
 
     @Override
-    public ResponseEntity<SalleDtoResponse> updateTable(Long id, SalleDtoRequest salleDtoRequest) {
+    public ResponseEntity<SalleDtoResponse> updateSalle(Long id, SalleDtoRequest salleDtoRequest) {
         Optional<Salle>salle=salleRepository.findById(id);
         if (salle.isPresent()){
             Salle salle1=salle.get();
