@@ -2,6 +2,8 @@ package com.gestion_restaurant.gestion_restaurant.controller;
 
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientDTOResponse;
 import com.gestion_restaurant.gestion_restaurant.DTO.ClientRequestDTO;
+import com.gestion_restaurant.gestion_restaurant.entity.Client;
+import com.gestion_restaurant.gestion_restaurant.entity.Commande;
 import com.gestion_restaurant.gestion_restaurant.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -30,12 +32,13 @@ public class ClientController {
     public ResponseEntity <ClientDTOResponse> updateUser(@PathVariable Long id,@RequestBody ClientRequestDTO client){
         return clientService.updateClient(id,client);
     }
+    @GetMapping("/{nom}")
+    public Client getByNomClient(@PathVariable String nom){
+        return clientService.findByNomClient(nom);
+    }
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id){
         return clientService.delete(id);
     }
-//    @GetMapping("/email/{nom}")
-//    public String getEmailByName( @PathVariable String nom){
-//        return clientService.getEmailByName(nom);
-//    }
+
 }

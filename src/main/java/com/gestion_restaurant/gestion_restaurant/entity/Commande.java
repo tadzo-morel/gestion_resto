@@ -21,10 +21,10 @@ public class Commande {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private LocalDate dateCommande;
+    private LocalDate dateCommande=getDateCommande();
     private LocalTime heureCommande;
     private LocalDate dateLivraison;
-    private LocalTime hereLivraison;
+    private LocalTime heureLivraison;
     private double montant;
     @Enumerated(EnumType.STRING)
     StatutCommande status;

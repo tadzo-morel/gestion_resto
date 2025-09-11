@@ -1,8 +1,6 @@
 package com.gestion_restaurant.gestion_restaurant.entity;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +14,14 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@DiscriminatorValue("salle")
-public class Salle extends EspaceReservable{
+public class Salle {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long capacite;
+    private StatusEspace status;
     @OneToMany(mappedBy = "salle")
     private List<Tables> tables=new ArrayList<>();
+    @ManyToOne
+    Reservation reservation;
 }
