@@ -27,9 +27,10 @@ public class SalleServiceImpl implements SalleService{
     @Override
     public ResponseEntity<SalleDtoResponse> create(SalleDtoRequest salleDtoRequest) {
         Salle salle=new Salle();
-        salle.setStatus(salleDtoRequest.status());
         salle.setCapacite(salleDtoRequest.capacite());
-        salle.setReservation(reservationRepository.getReservationByNbrePersonne(salleDtoRequest.nbrePersonne()));
+        salle.setStatus(salleDtoRequest.status());
+        salle.setReservation(reservationRepository.findByNbrePersonne(salleDtoRequest.nbrePersonne()).orElseThrow(()->new RuntimeException("il y a pas de salle pour se nombre de personne")));
+
         Salle newSalle=salleRepository.save(salle);
 
         SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
@@ -80,6 +81,7 @@ public class SalleServiceImpl implements SalleService{
             Salle salle1=salle.get();
             salle1.setStatus(salleDtoRequest.status());
             salle1.setCapacite(salleDtoRequest.capacite());
+            salle1.setReservation(reservationRepository.findByNbrePersonne(salleDtoRequest.nbrePersonne()).orElseThrow(()->new RuntimeException("il y a pas de salle pour ce nbre de personne")));
             Salle newSalle=salleRepository.save(salle1);
             SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
                     newSalle.getId(),

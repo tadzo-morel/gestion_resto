@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 
 public interface SalleRepository extends JpaRepository<Salle,Long> {
+
     @Query("select t from Salle s join tables t where t.nbre_place = :nbre_place")
     public ResponseEntity<TablesDtoResponse> getTableByNbre_Place(@Param("nbre_place") Long nbre_place);
+
 }
