@@ -2,8 +2,6 @@ package com.gestion_restaurant.gestion_restaurant.controller;
 
 import com.gestion_restaurant.gestion_restaurant.DTO.FactureDtoRequest;
 import com.gestion_restaurant.gestion_restaurant.DTO.FactureDtoResponse;
-import com.gestion_restaurant.gestion_restaurant.DTO.SalleDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.SalleDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.service.FactureService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

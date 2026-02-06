@@ -1,7 +1,5 @@
 package com.gestion_restaurant.gestion_restaurant.controller;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.PaiementDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.PaiementDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoRequest;
 import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.service.TableService;

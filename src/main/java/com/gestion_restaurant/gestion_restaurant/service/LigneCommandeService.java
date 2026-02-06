@@ -2,8 +2,6 @@ package com.gestion_restaurant.gestion_restaurant.service;
 
 import com.gestion_restaurant.gestion_restaurant.DTO.LigneDeCommandeDtoRequest;
 import com.gestion_restaurant.gestion_restaurant.DTO.LigneDeCommandeDtoResponse;
-import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

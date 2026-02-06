@@ -21,7 +21,7 @@ public class FactureServiceImpl implements FactureService {
     @Override
     public ResponseEntity<FactureDtoResponse> create(FactureDtoRequest factureDtoRequest) {
         Facture facture=new Facture();
-        facture.setNum_compte(factureDtoRequest.num_compte());
+        facture.setNum_compte(factureDtoRequest.numCompte());
         Facture newFacture=factureRepository.save(facture);
         FactureDtoResponse factureDtoResponse=new FactureDtoResponse(
                 newFacture.getId(),
@@ -62,7 +62,7 @@ public class FactureServiceImpl implements FactureService {
         Optional<Facture>facture=factureRepository.findById(id);
         if (facture.isPresent()){
             Facture facture1=facture.get();
-            facture1.setNum_compte(factureDtoRequest.num_compte());
+            facture1.setNum_compte(factureDtoRequest.numCompte());
             Facture newFacture=factureRepository.save(facture1);
             FactureDtoResponse factureDtoResponse=new FactureDtoResponse(
                     newFacture.getId(),

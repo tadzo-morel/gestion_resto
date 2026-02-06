@@ -20,8 +20,8 @@ public class PaiementServiceImpl implements PaiementService{
     @Override
     public ResponseEntity<PaiementDtoResponse> create(PaiementDtoRequest paiementDtoRequest) {
         Paiement paiement=new Paiement();
-        paiement.setDate_paiement(paiementDtoRequest.date_paiement());
-        paiement.setHeure_paiement(paiementDtoRequest.heure_paiement());
+        paiement.setDate_paiement(paiementDtoRequest.datePaiement());
+        paiement.setHeure_paiement(paiementDtoRequest.heurePaiement());
         paiement.setMontant(paiementDtoRequest.montant());
         paiement.setMode(paiementDtoRequest.mode());
         Paiement newPaiement=paiementRepository.save(paiement);
@@ -73,8 +73,8 @@ public class PaiementServiceImpl implements PaiementService{
         Optional<Paiement>paiement=paiementRepository.findById(id);
         if (paiement.isPresent()){
             Paiement setPaiement=paiement.get();
-            setPaiement.setDate_paiement(paiementDtoRequest.date_paiement());
-            setPaiement.setHeure_paiement(paiementDtoRequest.heure_paiement());
+            setPaiement.setDate_paiement(paiementDtoRequest.datePaiement());
+            setPaiement.setHeure_paiement(paiementDtoRequest.heurePaiement());
             setPaiement.setMontant(paiementDtoRequest.montant());
             setPaiement.setMode(paiementDtoRequest.mode());
             Paiement newPaiement=paiementRepository.save(setPaiement);

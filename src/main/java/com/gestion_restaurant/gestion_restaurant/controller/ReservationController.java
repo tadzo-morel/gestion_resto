@@ -1,7 +1,5 @@
 package com.gestion_restaurant.gestion_restaurant.controller;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.DTO.ReservationDtoRequest;
 import com.gestion_restaurant.gestion_restaurant.DTO.ReservationDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.service.ReservationService;

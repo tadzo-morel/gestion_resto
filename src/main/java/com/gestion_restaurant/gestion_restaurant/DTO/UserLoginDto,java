@@ -1,0 +1,6 @@
+package com.gestion_restaurant.gestion_restaurant.DTO;
+
+public record UserLoginDto(
+        String email,
+        String password
+) {}

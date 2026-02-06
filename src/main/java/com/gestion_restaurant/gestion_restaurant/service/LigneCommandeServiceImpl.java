@@ -21,11 +21,11 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
     @Override
     public ResponseEntity<LigneDeCommandeDtoResponse> create(LigneDeCommandeDtoRequest ligneDeCommandeDtoRequest) {
         LigneDeCommande ligneDeCommande=new LigneDeCommande();
-        ligneDeCommande.setQuantite_article(ligneDeCommandeDtoRequest.quantite_article());
+        ligneDeCommande.setQuantite_article(Long.valueOf(ligneDeCommandeDtoRequest.quantiteArticle()));
         LigneDeCommande newligneDeCommande=ligneCommandeRepository.save(ligneDeCommande);
         LigneDeCommandeDtoResponse ligneDeCommandeDtoResponse=new LigneDeCommandeDtoResponse(
                 newligneDeCommande.getId(),
-                newligneDeCommande.getQuantite_article()
+                newligneDeCommande.getQuantite_article().intValue()
         );
         return new ResponseEntity<>(ligneDeCommandeDtoResponse, HttpStatus.CREATED);
     }
@@ -37,7 +37,7 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
             LigneDeCommande ligneDeCommande1=ligneDeCommande.get();
             LigneDeCommandeDtoResponse ligneDeCommandeDtoResponse=new LigneDeCommandeDtoResponse(
                     ligneDeCommande1.getId(),
-                    ligneDeCommande1.getQuantite_article()
+                    ligneDeCommande1.getQuantite_article().intValue()
             );
             return new ResponseEntity<>(ligneDeCommandeDtoResponse,HttpStatus.OK);
         }
@@ -51,8 +51,9 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
         for (LigneDeCommande ligneDeCommande:ligneDeCommandes){
             LigneDeCommandeDtoResponse ligneDeCommandeDtoResponse=new LigneDeCommandeDtoResponse(
                     ligneDeCommande.getId(),
-                    ligneDeCommande.getQuantite_article()
+                    ligneDeCommande.getQuantite_article().intValue()
             );
+            ligneDeCommandeDtoResponses.add(ligneDeCommandeDtoResponse);
         }
         return new ResponseEntity<>(ligneDeCommandeDtoResponses,HttpStatus.OK);
     }
@@ -62,11 +63,11 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
         Optional <LigneDeCommande> ligneDeCommande=ligneCommandeRepository.findById(id);
         if (ligneDeCommande.isPresent()){
             LigneDeCommande ligneDeCommande1=ligneDeCommande.get();
-            ligneDeCommande1.setQuantite_article(ligneDeCommandeDtoRequest.quantite_article());
+            ligneDeCommande1.setQuantite_article(Long.valueOf(ligneDeCommandeDtoRequest.quantiteArticle()));
             LigneDeCommande newligneDeCommande=ligneCommandeRepository.save(ligneDeCommande1);
             LigneDeCommandeDtoResponse ligneDeCommandeDtoResponse=new LigneDeCommandeDtoResponse(
                     newligneDeCommande.getId(),
-                    newligneDeCommande.getQuantite_article()
+                    newligneDeCommande.getQuantite_article().intValue()
             );
             return new ResponseEntity<>(ligneDeCommandeDtoResponse,HttpStatus.OK);
         }
