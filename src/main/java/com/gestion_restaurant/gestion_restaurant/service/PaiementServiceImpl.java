@@ -1,7 +1,7 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.PaiementDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.PaiementDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.PaiementDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.PaiementDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Paiement;
 import com.gestion_restaurant.gestion_restaurant.repository.PaiementRepository;
 import lombok.AllArgsConstructor;
@@ -17,6 +17,11 @@ import java.util.Optional;
 @Service
 public class PaiementServiceImpl implements PaiementService{
     private final PaiementRepository paiementRepository;
+
+    // public PaiementServiceImpl(PaiementRepository paiementRepository) {
+    //     this.paiementRepository = paiementRepository;
+    // }
+
     @Override
     public ResponseEntity<PaiementDtoResponse> create(PaiementDtoRequest paiementDtoRequest) {
         Paiement paiement=new Paiement();
@@ -37,7 +42,8 @@ public class PaiementServiceImpl implements PaiementService{
 
     @Override
     public ResponseEntity<PaiementDtoResponse> getPaiement(Long id) {
-        Optional<Paiement>paiement=paiementRepository.findById(id);
+        Optional<Paiement> paiement = paiementRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Paiement not found"));
         if (paiement.isPresent()){
             Paiement paiement1=paiement.get();
             PaiementDtoResponse paiementDtoResponse=new PaiementDtoResponse(
@@ -70,7 +76,8 @@ public class PaiementServiceImpl implements PaiementService{
 
     @Override
     public ResponseEntity<PaiementDtoResponse> updatePaiement(Long id, PaiementDtoRequest paiementDtoRequest) {
-        Optional<Paiement>paiement=paiementRepository.findById(id);
+        Optional<Paiement> paiement=paiementRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Paiement not found"));
         if (paiement.isPresent()){
             Paiement setPaiement=paiement.get();
             setPaiement.setDate_paiement(paiementDtoRequest.datePaiement());
@@ -92,6 +99,9 @@ public class PaiementServiceImpl implements PaiementService{
 
     @Override
     public String delete(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
         paiementRepository.deleteById(id);
         return "Paiement annuler";
     }

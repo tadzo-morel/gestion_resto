@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface SalleRepository extends JpaRepository<Salle, Long> {
     
-    // CORRECTION: Changer le type de retour et la syntaxe JPQL
-    @Query("SELECT t FROM Salle s JOIN s.tables t WHERE t.nbre_place = :nbrePlace")
+    // Méthode pour trouver les tables par nombre de places
+    @Query("SELECT t FROM Salle s JOIN s.tables t WHERE t.nbrePlace = :nbrePlace")
     List<Tables> findTablesByNbrePlace(@Param("nbrePlace") Integer nbrePlace);
     
-    // AJOUT: Autres méthodes utiles
+    // Méthodes utiles supplémentaires
     @Query("SELECT s FROM Salle s WHERE s.capacite >= :capaciteMin")
     List<Salle> findByCapaciteGreaterThanEqual(@Param("capaciteMin") Integer capaciteMin);
     

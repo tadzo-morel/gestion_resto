@@ -1,4 +1,4 @@
-package com.gestion_restaurant.gestion_restaurant.DTO;
+package com.gestion_restaurant.gestion_restaurant.dto;
 
 import java.time.LocalDate;
 

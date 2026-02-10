@@ -1,12 +1,15 @@
-package com.gestion_restaurant.gestion_restaurant.DTO;
+package com.gestion_restaurant.gestion_restaurant.dto;
 
-import com.gestion_restaurant.gestion_restaurant.entity.StatutCommande;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.gestion_restaurant.gestion_restaurant.entity.StatutCommande;
+
 public record CommandeDtoRequest(
         // Dates et heures (dateCommande générée automatiquement)
+        LocalDate dateCommande,
+        LocalTime heureCommande,
         LocalDate dateLivraison,
         LocalTime heureLivraison,
         
@@ -36,6 +39,8 @@ public record CommandeDtoRequest(
     
     // Constructeur simplifié (sans articles)
     public CommandeDtoRequest(
+            LocalDate dateCommande,
+            LocalTime heureCommande,
             LocalDate dateLivraison,
             LocalTime heureLivraison,
             StatutCommande status,
@@ -44,7 +49,7 @@ public record CommandeDtoRequest(
             String nomLivreur,
             Double montant
     ) {
-        this(dateLivraison, heureLivraison, status, localisation, 
+        this( dateCommande, heureCommande, dateLivraison, heureLivraison, status, localisation, 
              nomClient, nomLivreur, montant, List.of());
     }
 }

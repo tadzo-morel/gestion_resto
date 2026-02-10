@@ -1,7 +1,7 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.FactureDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.FactureDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.FactureDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.FactureDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Facture;
 import com.gestion_restaurant.gestion_restaurant.repository.FactureRepository;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,10 @@ import java.util.Optional;
 public class FactureServiceImpl implements FactureService {
     private final FactureRepository factureRepository;
 
+    // public FactureServiceImpl(FactureRepository factureRepository) {
+    //     this.factureRepository = factureRepository;
+    // }
+
     @Override
     public ResponseEntity<FactureDtoResponse> create(FactureDtoRequest factureDtoRequest) {
         Facture facture=new Facture();
@@ -32,7 +36,8 @@ public class FactureServiceImpl implements FactureService {
 
     @Override
     public ResponseEntity<FactureDtoResponse> getFacture(Long id) {
-        Optional<Facture> facture=factureRepository.findById(id);
+        Optional<Facture> facture = factureRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Facture not found"));
         if (facture.isPresent()){
             Facture facture1=facture.get();
             FactureDtoResponse factureDtoResponse=new FactureDtoResponse(
@@ -59,7 +64,8 @@ public class FactureServiceImpl implements FactureService {
 
     @Override
     public ResponseEntity<FactureDtoResponse> updateFacture(Long id, FactureDtoRequest factureDtoRequest) {
-        Optional<Facture>facture=factureRepository.findById(id);
+        Optional<Facture>facture = factureRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Facture not found"));
         if (facture.isPresent()){
             Facture facture1=facture.get();
             facture1.setNum_compte(factureDtoRequest.numCompte());
@@ -75,6 +81,9 @@ public class FactureServiceImpl implements FactureService {
 
     @Override
     public String delete(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
         factureRepository.deleteById(id);
         return "Facture supprimer";
     }

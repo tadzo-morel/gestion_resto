@@ -1,7 +1,7 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.LivreurDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.LivreurDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.LivreurDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.LivreurDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Livreur;
 import com.gestion_restaurant.gestion_restaurant.repository.LivreurRepository;
 import lombok.AllArgsConstructor;
@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,12 @@ import java.util.Optional;
 @AllArgsConstructor
 public class LivreurServiceImpl implements LivreurService{
     private final LivreurRepository livreurRepository;
+
+    // // Added constructor to initialize livreurRepository
+    // public LivreurServiceImpl(LivreurRepository livreurRepository) {
+    //     this.livreurRepository = livreurRepository;
+    // }
+
     @Override
     public ResponseEntity<LivreurDtoResponse> create(LivreurDtoRequest livreurDtoRequest) {
         Livreur livreur=new Livreur();
@@ -98,7 +105,13 @@ public class LivreurServiceImpl implements LivreurService{
 
     @Override
     public String delete(Long id) {
+        Optional<Livreur> livreur = livreurRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Livreur not found"));
         livreurRepository.deleteById(id);
+        // Ensure id is not null before calling deleteById
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
         return "Livreur supprimer";
     }
 

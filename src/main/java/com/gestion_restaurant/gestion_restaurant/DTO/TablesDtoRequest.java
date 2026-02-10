@@ -1,9 +1,9 @@
-package com.gestion_restaurant.gestion_restaurant.DTO;
+package com.gestion_restaurant.gestion_restaurant.dto;
 
 import com.gestion_restaurant.gestion_restaurant.entity.StatusEspace;
 
 public record TablesDtoRequest(
-        int nbre_place,
-        StatusEspace status
-) {
-}
+    Integer nbrePlace,         // camelCase
+    StatusEspace status,
+    Long salleId               // ID de la salle
+) {}

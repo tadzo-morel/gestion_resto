@@ -1,7 +1,7 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.LigneDeCommandeDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.LigneDeCommandeDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.LigneDeCommandeDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.LigneDeCommandeDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.LigneDeCommande;
 import com.gestion_restaurant.gestion_restaurant.repository.LigneCommandeRepository;
 import lombok.AllArgsConstructor;
@@ -18,6 +18,10 @@ import java.util.Optional;
 public class LigneCommandeServiceImpl implements LigneCommandeService {
     private final LigneCommandeRepository ligneCommandeRepository;
 
+    // public LigneCommandeServiceImpl(LigneCommandeRepository ligneCommandeRepository) {
+    //     this.ligneCommandeRepository = ligneCommandeRepository;
+    // }
+
     @Override
     public ResponseEntity<LigneDeCommandeDtoResponse> create(LigneDeCommandeDtoRequest ligneDeCommandeDtoRequest) {
         LigneDeCommande ligneDeCommande=new LigneDeCommande();
@@ -32,7 +36,8 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
 
     @Override
     public ResponseEntity<LigneDeCommandeDtoResponse> getLigneCommande(Long id) {
-        Optional<LigneDeCommande> ligneDeCommande=ligneCommandeRepository.findById(id);
+        Optional<LigneDeCommande> ligneDeCommande = ligneCommandeRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Ligne de commande not found"));
         if (ligneDeCommande.isPresent()){
             LigneDeCommande ligneDeCommande1=ligneDeCommande.get();
             LigneDeCommandeDtoResponse ligneDeCommandeDtoResponse=new LigneDeCommandeDtoResponse(
@@ -60,7 +65,8 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
 
     @Override
     public ResponseEntity<LigneDeCommandeDtoResponse> updateLigneCommande(Long id, LigneDeCommandeDtoRequest ligneDeCommandeDtoRequest) {
-        Optional <LigneDeCommande> ligneDeCommande=ligneCommandeRepository.findById(id);
+        Optional <LigneDeCommande> ligneDeCommande = ligneCommandeRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Ligne de commande not found"));
         if (ligneDeCommande.isPresent()){
             LigneDeCommande ligneDeCommande1=ligneDeCommande.get();
             ligneDeCommande1.setQuantite_article(Long.valueOf(ligneDeCommandeDtoRequest.quantiteArticle()));
@@ -76,6 +82,9 @@ public class LigneCommandeServiceImpl implements LigneCommandeService {
 
     @Override
     public String delete(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
         ligneCommandeRepository.deleteById(id);
         return "Ligne de commande Supprimer";
     }
