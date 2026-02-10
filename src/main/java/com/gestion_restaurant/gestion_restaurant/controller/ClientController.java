@@ -1,10 +1,7 @@
 package com.gestion_restaurant.gestion_restaurant.controller;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.ClientDTOResponse;
-import com.gestion_restaurant.gestion_restaurant.DTO.ClientRequestDTO;
-import com.gestion_restaurant.gestion_restaurant.DTO.LivreurDtoResponse;
-import com.gestion_restaurant.gestion_restaurant.entity.Client;
-import com.gestion_restaurant.gestion_restaurant.entity.Commande;
+import com.gestion_restaurant.gestion_restaurant.dto.ClientDTOResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.ClientRequestDTO;
 import com.gestion_restaurant.gestion_restaurant.service.ClientService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

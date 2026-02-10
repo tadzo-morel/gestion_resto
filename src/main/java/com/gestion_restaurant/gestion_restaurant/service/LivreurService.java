@@ -1,7 +1,7 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.LivreurDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.LivreurDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.LivreurDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.LivreurDtoResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

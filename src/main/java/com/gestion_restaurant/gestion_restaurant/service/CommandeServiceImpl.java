@@ -1,11 +1,9 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
 
-import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.CommandeDtoResponse;
-import com.gestion_restaurant.gestion_restaurant.entity.Client;
+import com.gestion_restaurant.gestion_restaurant.dto.CommandeDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.CommandeDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Commande;
-import com.gestion_restaurant.gestion_restaurant.entity.Livreur;
 import com.gestion_restaurant.gestion_restaurant.repository.ClientRepository;
 import com.gestion_restaurant.gestion_restaurant.repository.CommandeRepository;
 import com.gestion_restaurant.gestion_restaurant.repository.LivreurRepository;
@@ -14,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +23,10 @@ public class CommandeServiceImpl implements CommandeService{
     private final CommandeRepository commandeRepository;
     private final LivreurRepository livreurRepository;
     private final ClientRepository clientRepository;
+
     @Override
     public ResponseEntity<CommandeDtoResponse> create(CommandeDtoRequest commandeDtoRequest) {
-        Commande commande=new Commande();
+        Commande commande = new Commande();
         commande.setDateCommande(commandeDtoRequest.dateCommande());
         commande.setHeureCommande(commandeDtoRequest.heureCommande());
         commande.setDateLivraison(commandeDtoRequest.dateLivraison());
@@ -54,7 +54,8 @@ public class CommandeServiceImpl implements CommandeService{
 
     @Override
     public ResponseEntity<CommandeDtoResponse> getCommande(Long id) {
-        Optional<Commande> commande=commandeRepository.findById(id);
+        Optional<Commande> commande = commandeRepository.findById(id);
+                //.orElseThrow(() -> new IllegalArgumentException("Commande not found"));
         if (commande.isPresent()){
             Commande commande1=commande.get();
             CommandeDtoResponse commandeDtoResponse=new CommandeDtoResponse(
@@ -103,8 +104,6 @@ public class CommandeServiceImpl implements CommandeService{
         Commande commande = commandeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Client not found with id: " + id));
 
-        commande.setDateCommande(commandeDtoRequest.dateCommande());
-        commande.setHeureCommande(commandeDtoRequest.heureLivraison());
         commande.setDateLivraison(commandeDtoRequest.dateLivraison());
         commande.setHeureLivraison(commandeDtoRequest.heureLivraison());
         commande.setMontant(commandeDtoRequest.montant());
@@ -129,8 +128,14 @@ public class CommandeServiceImpl implements CommandeService{
 
     @Override
     public String delete(Long id) {
-        commandeRepository.deleteById(id);
-        return "Commande supprimer";
+        Optional<Commande> commande = commandeRepository.findById(id);
+                //.orElseThrow(() -> new IllegalArgumentException("Commande not found"));
+        if (commande.isPresent()) {
+            commandeRepository.deleteById(id);
+            return "Commande supprimer";
+        } else {
+            throw new EntityNotFoundException("Commande not found");
+        }
     }
     @Override
     public ResponseEntity<List<CommandeDtoResponse>> getAllCommandeFromClient(String nom) {
@@ -174,8 +179,4 @@ public class CommandeServiceImpl implements CommandeService{
         return new ResponseEntity<>(commandeDtoResponses,HttpStatus.OK);
     }
 
-//    @Override
-//    public Client finByNomClient(String nom) {
-//        return null;
-//    }
 }

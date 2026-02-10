@@ -8,8 +8,6 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -25,11 +23,17 @@ public class Reservation {
     private int nbrePersonne;
     @Enumerated(EnumType.STRING)
     StatutReservation status;
+    
     @ManyToOne
-    Client client;
+    @JoinColumn(name = "client_id")
+    private Client client;
+    
     @ManyToOne
-    Tables table;
-    @OneToMany(mappedBy = "reservation",fetch = FetchType.EAGER)
-    private List<Salle>salles=new ArrayList<>();
+    @JoinColumn(name = "table_id")
+    private Tables table;
+    
+    @ManyToOne
+    @JoinColumn(name = "salle_id")
+    private Salle salle;
 
 }

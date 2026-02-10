@@ -1,8 +1,8 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
 
-import com.gestion_restaurant.gestion_restaurant.DTO.ReservationDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.ReservationDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.ReservationDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.ReservationDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Reservation;
 import com.gestion_restaurant.gestion_restaurant.repository.ClientRepository;
 import com.gestion_restaurant.gestion_restaurant.repository.ReservationRepository;
@@ -20,6 +20,11 @@ import java.util.Optional;
 public class ReservationServiceImpl implements ReservationService{
     private final ReservationRepository reservationRepository;
     private final ClientRepository clientRepository;
+
+    // public ReservationServiceImpl(ReservationRepository reservationRepository, ClientRepository clientRepository) {
+    //     this.reservationRepository = reservationRepository;
+    //     this.clientRepository = clientRepository;
+    // }
 
     @Override
     public ResponseEntity<ReservationDtoResponse> create(ReservationDtoRequest reservationDtoRequest) {
@@ -43,22 +48,19 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     public ResponseEntity<ReservationDtoResponse> getReservation(Long id) {
-        Optional<Reservation> reservation=reservationRepository.findById(id);
-        if (reservation.isPresent()){
-            Reservation reservation1=reservation.get();
-            ReservationDtoResponse reservationDtoResponse=new ReservationDtoResponse(
-                    reservation1.getId(),
-                    reservation1.getDateReservation(),
-                    reservation1.getHeure(),
-                    reservation1.getNbrePersonne(),
-                    reservation1.getStatus(),
-                    reservation1.getClient().getNom()
-            );
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Reservation not found"));
+        Reservation reservation1=reservation.get();
+        ReservationDtoResponse reservationDtoResponse=new ReservationDtoResponse(
+                reservation1.getId(),
+                reservation1.getDateReservation(),
+                reservation1.getHeure(),
+                reservation1.getNbrePersonne(),
+                reservation1.getStatus(),
+                reservation1.getClient().getNom()
+        );
 
-            return new ResponseEntity<>(reservationDtoResponse, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(reservationDtoResponse, HttpStatus.OK);
     }
 
     @Override
@@ -80,8 +82,7 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     public ResponseEntity<ReservationDtoResponse> updateReservation(Long id, ReservationDtoRequest reservationDtoRequest) {
-        Reservation reservation = reservationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Reservation not found with id: " + id));
+        Reservation reservation = reservationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Reservation not found with id: " + id));
 
         reservation.setDateReservation(reservationDtoRequest.dateReservation());
         reservation.setHeure(reservationDtoRequest.heureReservation());
@@ -102,6 +103,9 @@ public class ReservationServiceImpl implements ReservationService{
 
     @Override
     public String delete(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id cannot be null");
+        }
         reservationRepository.deleteById(id);
         return "Reservation supprimer";
     }

@@ -1,102 +1,165 @@
 package com.gestion_restaurant.gestion_restaurant.service;
 
-import com.gestion_restaurant.gestion_restaurant.DTO.SalleDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.SalleDtoResponse;
-import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoRequest;
-import com.gestion_restaurant.gestion_restaurant.DTO.TablesDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.SalleDtoRequest;
+import com.gestion_restaurant.gestion_restaurant.dto.SalleDtoResponse;
+import com.gestion_restaurant.gestion_restaurant.dto.TablesDtoResponse;
 import com.gestion_restaurant.gestion_restaurant.entity.Salle;
-import com.gestion_restaurant.gestion_restaurant.entity.Tables;
-import com.gestion_restaurant.gestion_restaurant.repository.ReservationRepository;
 import com.gestion_restaurant.gestion_restaurant.repository.SalleRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @Service
-public class SalleServiceImpl implements SalleService{
+@AllArgsConstructor
+@Transactional
+public class SalleServiceImpl implements SalleService {
+    
     private final SalleRepository salleRepository;
-    private final ReservationRepository reservationRepository;
+
+    // Added constructor to initialize salleRepository
+    // public SalleServiceImpl(SalleRepository salleRepository) {
+    //     this.salleRepository = salleRepository;
+    // }
 
     @Override
     public ResponseEntity<SalleDtoResponse> create(SalleDtoRequest salleDtoRequest) {
-        Salle salle=new Salle();
+        Salle salle = new Salle();
         salle.setCapacite(salleDtoRequest.capacite());
         salle.setStatus(salleDtoRequest.status());
-        salle.setReservation(reservationRepository.findByNbrePersonne(salleDtoRequest.nbrePersonne()).orElseThrow(()->new RuntimeException("il y a pas de salle pour se nombre de personne")));
-
-        Salle newSalle=salleRepository.save(salle);
-
-        SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
+        
+        Salle newSalle = salleRepository.save(salle);
+        
+        SalleDtoResponse response = new SalleDtoResponse(
                 newSalle.getId(),
                 newSalle.getCapacite(),
                 newSalle.getStatus(),
-                newSalle.getReservation().getNbrePersonne()
+                null,
+                newSalle.getTables().size(),
+                newSalle.getTables().stream()
+                        .map(t -> new TablesDtoResponse(
+                                t.getId(),
+                                t.getStatus(),
+                                t.getNbrePlace(),
+                                t.getSalle().getId(),
+                                "Salle " + t.getSalle().getId()
+                        ))
+                        .collect(Collectors.toList())
         );
-
-        return new ResponseEntity<>(salleDtoResponse, HttpStatus.CREATED);
+        
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<SalleDtoResponse> getSalle(Long id) {
-        Optional<Salle>salle=salleRepository.findById(id);
-        if (salle.isPresent()){
-            Salle newSalle=salle.get();
-            SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
-                    newSalle.getId(),
-                    newSalle.getCapacite(),
-                    newSalle.getStatus(),
-                    newSalle.getReservation().getNbrePersonne()
+        Optional<Salle> salleOpt = salleRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Salle not found"));
+        
+        if (salleOpt.isPresent()) {
+            Salle salle = salleOpt.get();
+            
+            SalleDtoResponse response = new SalleDtoResponse(
+                    salle.getId(),
+                    salle.getCapacite(),
+                    salle.getStatus(),
+                    null,
+                    salle.getTables().size(),
+                    salle.getTables().stream()
+                            .map(t -> new TablesDtoResponse(
+                                    t.getId(),
+                                    t.getStatus(),
+                                    t.getNbrePlace(),
+                                    t.getSalle().getId(),
+                                    "Salle " + t.getSalle().getId()
+                            ))
+                            .collect(Collectors.toList())
             );
-            return new ResponseEntity<>(salleDtoResponse,HttpStatus.OK);
+            
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        
+        throw new EntityNotFoundException("Salle not found");
     }
 
     @Override
     public ResponseEntity<List<SalleDtoResponse>> getAllSalle() {
-       List<Salle>salles=salleRepository.findAll();
-       List<SalleDtoResponse>salleDtoResponses=new ArrayList<>();
-       for (Salle salle:salles){
-           salleDtoResponses.add(new SalleDtoResponse(
-                   salle.getId(),
-                   salle.getCapacite(),
-                   salle.getStatus(),
-                   salle.getReservation().getNbrePersonne()
-           ));
-       }
-        return new ResponseEntity<>(salleDtoResponses,HttpStatus.OK);
+        List<Salle> salles = salleRepository.findAll();
+        List<SalleDtoResponse> responses = new ArrayList<>();
+        
+        for (Salle salle : salles) {
+            responses.add(new SalleDtoResponse(
+                    salle.getId(),
+                    salle.getCapacite(),
+                    salle.getStatus(),
+                    null,
+                    salle.getTables().size(),
+                    salle.getTables().stream()
+                            .map(t -> new TablesDtoResponse(
+                                    t.getId(),
+                                    t.getStatus(),
+                                    t.getNbrePlace(),
+                                    t.getSalle().getId(),
+                                    "Salle " + t.getSalle().getId()
+                            ))
+                            .collect(Collectors.toList())
+            ));
+        }
+        
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<SalleDtoResponse> updateSalle(Long id, SalleDtoRequest salleDtoRequest) {
-        Optional<Salle>salle=salleRepository.findById(id);
-        if (salle.isPresent()){
-            Salle salle1=salle.get();
-            salle1.setStatus(salleDtoRequest.status());
-            salle1.setCapacite(salleDtoRequest.capacite());
-            salle1.setReservation(reservationRepository.findByNbrePersonne(salleDtoRequest.nbrePersonne()).orElseThrow(()->new RuntimeException("il y a pas de salle pour ce nbre de personne")));
-            Salle newSalle=salleRepository.save(salle1);
-            SalleDtoResponse salleDtoResponse=new SalleDtoResponse(
-                    newSalle.getId(),
-                    newSalle.getCapacite(),
-                    newSalle.getStatus(),
-                    newSalle.getReservation().getNbrePersonne()
+        Optional<Salle> salleOpt = salleRepository.findById(id);
+        //.orElseThrow(() -> new IllegalArgumentException("Salle not found"));
+        
+        if (salleOpt.isPresent()) {
+            Salle salle = salleOpt.get();
+            salle.setCapacite(salleDtoRequest.capacite());
+            salle.setStatus(salleDtoRequest.status());
+            
+            Salle updatedSalle = salleRepository.save(salle);
+            
+            SalleDtoResponse response = new SalleDtoResponse(
+                    updatedSalle.getId(),
+                    updatedSalle.getCapacite(),
+                    updatedSalle.getStatus(),
+                    null,
+                    updatedSalle.getTables().size(),
+                    updatedSalle.getTables().stream()
+                            .map(t -> new TablesDtoResponse(
+                                    t.getId(),
+                                    t.getStatus(),
+                                    t.getNbrePlace(),
+                                    t.getSalle().getId(),
+                                    "Salle " + t.getSalle().getId()
+                            ))
+                            .collect(Collectors.toList())
             );
-            return new ResponseEntity<>(salleDtoResponse,HttpStatus.OK);
+            
+            return new ResponseEntity<>(response, HttpStatus.OK);
         }
+        
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @Override
     public String delete(Long id) {
+        Salle salle = salleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Salle non trouvée"));
+        
+        if (!salle.getTables().isEmpty()) {
+            throw new RuntimeException("Impossible de supprimer. La salle contient des tables.");
+        }
+        
         salleRepository.deleteById(id);
-        return "Salle supprimer";
+        return "Salle supprimée avec succès";
     }
 }

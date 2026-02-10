@@ -1,6 +1,4 @@
-package com.gestion_restaurant.gestion_restaurant.DTO;
-
-import com.gestion_restaurant.gestion_restaurant.entity.Client;
+package com.gestion_restaurant.gestion_restaurant.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
